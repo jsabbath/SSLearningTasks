@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import UpButton from './ButtonComponent.js';
+import UpButton from './UpButton.js';
+import FileChooser from './FileChooser.js';
 
 class App extends Component {
   render() {
@@ -12,8 +13,8 @@ class App extends Component {
           <p>
             File Uploader 
           </p>
-          <p><button type="button">Browse</button></p>
-          <p><UpButton/></p>
+          <p><FileChooser/>
+          <UpButton/></p>
         </header>
       </div>
     );
