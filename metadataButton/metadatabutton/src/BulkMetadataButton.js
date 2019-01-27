@@ -24,16 +24,52 @@ const style = theme => ({
 class BulkMetadataButton extends React.Component {	    
 		constructor(props) {
             super(props);
-            this.state = { contentFileName: "" };
+            this.state = {
+            /*id: props.content.id,
+            name: props.content.name,
+            source: props.content.source,
+            title: props.content.title,
+            creators: labels.creators,
+            selectedDate: props.content.updatedDate,
+            description: props.content.description,
+            coverages: labels.coverages,
+            libraryVersion: props.content.libraryVersion,
+            menuFolder: props.content.menuFolder,
+            subFolder: props.content.subFolder,
+            subjects: labels.subjects,
+            keywords: labels.keywords,
+            workareas: labels.workareas,
+            languages: labels.languages,
+            catalogers: labels.catalogers,
+            copyright: props.content.copyright,
+            rightsStatement: props.content.rightsStatement,
+            contributorName: props.content.contributorName,*/
+            contentFile: null,
+            fieldErrors: {},
+            //contentFileName: props.content.originalFileName ? props.content.originalFileName : '',
+        };
+            this.handleFileSelection = this.handleFileSelection.bind(this);
         }
+        
+        handleFileSelection(evt) {
+            evt.persist();
+            const file = evt.target.files[0];
+            if (!Boolean(file)) { // If there is no file selected.
+                return;
+            }
+            this.setState((prevState, props) => {
+                const newState = {
+                    contentFile: file,
+                    contentFileName: file.name,
+                    fieldErrors: prevState.fieldErrors,
+                };
+                //newState.fieldErrors['file'] = null;
+                return newState;
+            });
+        }
+        
 		render(){
 				return (
-					<div>
-								<h3>Metadata Spreadsheet Upload</h3>					
-							    <p>
-								
-								</p>
-								
                                 <Grid item xs = {8}>
                                     <TextField
                                         id="metadataFile"
@@ -44,26 +80,30 @@ class BulkMetadataButton extends React.Component {
                                             shrink: true,
                                         }}
                                        // error={this.state.fieldErrors.file ? true : false}
-                                        value={this.state.contentFileName}
+                                        value = {this.state.contentFileName}
                                         margin="normal"
                                     />
 									<input 
-									accept="*"
+									accept=".csv"
 									className={"hidden"}
 									id="metadata-upload-input"
 									multiple
 									type="file" 
-									//ref={input => {this.fileInput = input;}} 
+									ref={input => {this.fileInput = input;}} 
+                                    onChange={this.handleFileSelection}
 									/>
 	
 								<label htmlFor="metadata-upload-input">
 								<Button variant="contained" component="span">
-									Upload Metadata
-									
+                                    Browse
 								</Button>
 								</label>
+                                <div style={{marginTop: '20px'}}> </div>
+                                <Button variant="contained" component="span" onClick={this.saveContent}>
+                                    Save
+                                </Button>
                                 </Grid>
-					</div>
+					
 			);
 		}
 	
