@@ -49,7 +49,9 @@ class BulkMetadataButton extends React.Component {
             //contentFileName: props.content.originalFileName ? props.content.originalFileName : '',
         };
             this.handleFileSelection = this.handleFileSelection.bind(this);
+            this.saveContent = this.saveContent.bind(this);
         }
+        
         
         handleFileSelection(evt) {
             evt.persist();
@@ -66,6 +68,17 @@ class BulkMetadataButton extends React.Component {
                 //newState.fieldErrors['file'] = null;
                 return newState;
             });
+        }
+        
+        saveContent() {
+            var Papa = require('papaparse'); 
+            
+            Papa.parse(this.state.contentFile, {
+                complete: function(results) {
+                    console.log(results);
+                }
+            });
+
         }
         
 		render(){
@@ -88,6 +101,7 @@ class BulkMetadataButton extends React.Component {
 									className={"hidden"}
 									id="metadata-upload-input"
 									multiple
+                                    
 									type="file" 
 									ref={input => {this.fileInput = input;}} 
                                     onChange={this.handleFileSelection}
