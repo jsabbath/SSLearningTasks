@@ -25,28 +25,29 @@ class BulkMetadataButton extends React.Component {
 		constructor(props) {
             super(props);
             this.state = {
-            /*id: props.content.id,
-            name: props.content.name,
-            source: props.content.source,
-            title: props.content.title,
-            creators: labels.creators,
-            selectedDate: props.content.updatedDate,
-            description: props.content.description,
-            coverages: labels.coverages,
-            libraryVersion: props.content.libraryVersion,
-            menuFolder: props.content.menuFolder,
-            subFolder: props.content.subFolder,
-            subjects: labels.subjects,
-            keywords: labels.keywords,
-            workareas: labels.workareas,
-            languages: labels.languages,
-            catalogers: labels.catalogers,
-            copyright: props.content.copyright,
-            rightsStatement: props.content.rightsStatement,
-            contributorName: props.content.contributorName,*/
+            id: "",
+            name: "",
+            source: "",
+            title: "",
+            creators: "",
+            selectedDate: "",
+            description: "",
+            coverages: "",
+            libraryVersion: "",
+            menuFolder: "",
+            subFolder: "",
+            subjects: "",
+            keywords: "",
+            workareas: "",
+            languages: "",
+            catalogers: "",
+            copyright: "",
+            rightsStatement: "",
+            contributorName: "Barry",
             contentFile: null,
             fieldErrors: {},
-            //contentFileName: props.content.originalFileName ? props.content.originalFileName : '',
+            //contentFileName: props.content.originalFileName ? props.content.originalFileName : '',s
+            
         };
             this.handleFileSelection = this.handleFileSelection.bind(this);
             this.saveContent = this.saveContent.bind(this);
@@ -71,12 +72,61 @@ class BulkMetadataButton extends React.Component {
         }
         
         saveContent() {
-            var Papa = require('papaparse'); 
             
+            var Papa = require('papaparse'); 
+            var thisData = [];
+            var that = this;
+            console.log(that.state);
             Papa.parse(this.state.contentFile, {
+                header:true,
                 complete: function(results) {
-                    console.log(results);
+                    //console.log(results);
+                   
+                    for (var i = 0; i < results.data.length-1; i++)  {
+                    
+                       thisData[i] = results.data[i];
+                        
+     
+                    }
+                    console.log(thisData[4]);
+                    var object = thisData[4];
+                    // console.log(object);
+                    const payload = new FormData();
+                    that.setState({
+                                contributorName: object["Contributor Name"],
+                                copyright: object["Copyright"],
+                                coverages: object["Coverage"],
+                                creators: object["Creator"],
+                                description: object["Description"],
+                                keywords: object["Keywords"],
+                                languages: object["Language"],
+                                libraryVersion: object["Library Version"],
+                                menuFolder: object["Menu Item/Main Folder"],
+                                rightsStatement: object["Rights Statement"],
+                                source: object["Source"],
+                                subFolder: object["Sub-Item/Subfolders"],
+                                subjects: object["Subject"],
+                                title: object["Title"],
+                                workareas: object["Work Area"],}
+                    );
+                    
+                    for (var property in object) {
+                        if(object.hasOwnProperty(property)) {
+                            if(object[property] === "")
+                                object[property] = "No Value";
+                            //console.log(property + " : " + object[property]);
+                            payload.append(property, object[property]);
+                             
+                        }
+                    }
+                    
+                    /*for (var keys of payload.keys()) {
+                        console.log(keys);
+                    }*/
+                    console.log(that.state);
+                   
                 }
+                
             });
 
         }
