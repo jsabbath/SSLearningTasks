@@ -85,13 +85,9 @@ class BulkMetadataButton extends React.Component {
                     for (var i = 0; i < results.data.length-1; i++)  {
                     
                        thisData[i] = results.data[i];
-                        
-     
-                    }
-                    console.log(thisData[4]);
-                    var object = thisData[4];
+                        console.log(thisData[i]);
+                    var object = thisData[i];
                     // console.log(object);
-                    const payload = new FormData();
                     that.setState({
                                 contributorName: object["Contributor Name"],
                                 copyright: object["Copyright"],
@@ -109,7 +105,11 @@ class BulkMetadataButton extends React.Component {
                                 title: object["Title"],
                                 workareas: object["Work Area"],}
                     );
+     
+                    }
                     
+                                        const payload = new FormData();
+
                     for (var property in object) {
                         if(object.hasOwnProperty(property)) {
                             if(object[property] === "")
